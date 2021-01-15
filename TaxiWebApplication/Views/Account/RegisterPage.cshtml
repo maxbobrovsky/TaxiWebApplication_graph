@@ -1,0 +1,86 @@
+﻿@model TaxiWebApplication.ViewModels.RegisterViewModel
+@{
+}
+
+@{
+    ViewData["Title"] = "Register Page";
+    Layout = null;
+
+}
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+<style>
+    .d {
+        margin: 0;
+        padding: 0;
+        color: #c3a709;
+    }
+</style>
+
+
+<body class="d">
+    <header>
+
+        @{
+            var roles = ((SelectList)ViewData["Roles"]);
+        }
+
+        <form method="post" asp-controller="Account" asp-action="RegisterPage">
+
+
+
+
+            <div class="container">
+                <h1 class="amp">Registration of new user</h1>
+
+                <div asp-validation-summary="ModelOnly"></div>
+                <div class="form-group row">
+                    <label asp-for="Email" class="mr-sm-2 mb-0"></label><br />
+                    <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                    <span asp-validation-for="Email"></span>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="NativeCity" class="mr-sm-2 mb-0"></label><br />
+                    <input asp-for="NativeCity" class="form-control" placeholder="Enter your native city" />
+                    <span asp-validation-for="NativeCity"></span>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Password" class="mr-sm-2 mb-0"></label><br />
+                    <input asp-for="Password" class="form-control" placeholder="Password" />
+                    <span asp-validation-for="Password"></span>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="PasswordConfirm" class="mr-sm-2 mb-0"></label><br />
+                    <input asp-for="PasswordConfirm" class="form-control" placeholder="Password" />
+                    <span asp-validation-for="PasswordConfirm"></span>
+                </div>
+
+                <select id="select_" class="form-control" asp-for="Role" asp-items="@((List<SelectListItem>)(((SelectList)ViewData["Roles"]).Items))">
+                </select>
+                <input type="submit" class="btn btn-warning btn-block" value="Registration" />
+
+            </div>
+        </form>
+
+    </header>
+    <section>
+        <div class="container">
+            <h1 class="teat">Order Pay and Go!</h1>
+            <img src="~/images/order.jpg" class="ordimg" alt="Order" />
+        </div>
+    </section>
+</body>
+</html>

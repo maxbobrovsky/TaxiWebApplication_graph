@@ -1,0 +1,120 @@
+﻿@{ Layout = null;
+    var one = Convert.ToDecimal(ViewData["Distance"]);
+    var two = Convert.ToDecimal(ViewData["Price"]);
+    //var three = 0;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js"></script>
+    <style>
+        #map {
+            height: 500px;
+            width: 800px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body onload="huinya('@one', '@two')">
+    <h1>Click on the map on the point where you need to reach</h1>
+    <div></div>
+    <div id="map"></div>
+    
+    @*<form method="post" asp-controller="Order" asp-action="Distance">
+        <input type="hidden" id="user_address" name="UserAddress" asp-for="userAddress" />
+    </form>*@
+
+
+
+
+    <script type="text/javascript">
+
+        var user_address;
+        var destinat;
+        var hivo;
+        async function huinya(one, two) {
+
+            
+            var map = L.map('map').setView([50.64086, 29.92616], 2);
+            L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=y8obR85WfJgHplTVkbz9', {
+                tileSize: 512,
+                zoomOffset: -1,
+                minZoom: 1,
+                attribution: "\u003ca href=\"https://www.maptiler.com/copyright/\" target=\"_blank\"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e",
+                crossOrigin: true,
+                accessToken: "your.mapbox.access.token"
+
+            }).addTo(map);
+
+            //console.log("one before change:", one);
+            //console.log("two before change:", two);
+
+            var oneone = one.replace(",", ".");
+            var twotwo = two.replace(",", ".");
+
+            console.log("one before change:", oneone);
+            console.log("two before change:", twotwo);
+            
+            var marker1;
+            await map.on('click', onClick);
+            //var mark = L.marker([50.64086, 29.92616]).addTo(map).bindPopup('<b>Hello!</b><br />Borodianka...').openPopup();
+            var marker = L.marker([parseFloat(oneone), parseFloat(twotwo)]).addTo(map).bindPopup('<b>Hello!</b><br />You are here...').openPopup();
+            //var popup = marker.bindPopup('<b>Hello!</b><br />You are here...');
+            newMarkerGroup = new L.LayerGroup();
+            
+            //var marker1;
+
+
+            async function onClick(e) {
+                // Add marker to map at click location; add popup window
+                
+                if (marker1) {
+                    map.removeLayer(marker1);
+                }
+
+                marker1 = new L.marker(e.latlng).addTo(map);
+                alert(marker1.getLatLng());
+
+                destinat = marker1.getLatLng();
+                await GetAddr(parseFloat(oneone), parseFloat(twotwo), destinat.lat, destinat.lng);
+            }
+
+        }
+
+        async function GetAddr(onne, twwo, dest_lat, dest_lon) {
+
+            user_address = { FirstLat: onne, FirstLong: twwo, SecondLat : dest_lat, SecondLong : dest_lon };
+            console.log("value", user_address);
+            hivo = JSON.stringify(user_address);
+
+            console.log(hivo);
+            const url = "@Url.Action("VVDistance", "Order")";
+            //debugger;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: new Headers({ 'Content-Type': 'application/json' }),
+                body: JSON.stringify(user_address)
+            });
+
+            const myData = await response.json();
+            console.log(myData);
+        }
+
+
+
+
+    </script>
+</body>
+</html>
+

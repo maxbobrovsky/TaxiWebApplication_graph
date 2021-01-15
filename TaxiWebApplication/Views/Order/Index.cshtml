@@ -1,0 +1,33 @@
+﻿@{
+
+    ViewData["Title"] = "Order Page";
+    Layout = null;
+}
+@model TaxiWebApplication.ViewModels.OrderViewModel
+
+<h1>Please enable geolocation on your device so that we can determine your current location</h1>
+
+<div asp-validation-summary="ModelOnly"></div>
+<form method="post" asp-controller="Order" asp-action="Index">
+    <input type="hidden" asp-for="Created" />
+
+    <input id="address" name="Address" asp-for="Address"/>
+    <button type="submit" id="submit_button">Submit</button>
+    <span asp-validation-for="Address"></span>
+</form>
+    <input type="hidden" asp-for="Created" />
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        debugger;
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(loadGeolocation);
+        }
+
+        function loadGeolocation(position) {
+            $('#address').val(position.coords.latitude + " " + position.coords.longitude);
+        }
+    });
+
+</script>

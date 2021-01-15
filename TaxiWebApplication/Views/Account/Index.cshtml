@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="heading clearfix">
+                <img src="/images/logo.png" alt="TaxLogo" class="logo" />
+                <nav>
+                    <ul class="menu">
+                        <li>
+                            <a class="button" asp-action="Index" asp-controller="Order">Order</a>
+                        </li>
+                        <li>
+                            <a href="#">About</a>
+                        </li>
+                        <li>
+                            <a href="#">Profile</a>
+                        </li>
+                        <li>
+                            
+                            <form method="post" asp-controller="Account" asp-action="Logout" > 
+                               
+                                <input type="submit" value="Logout" />
+                                
+                            </form>
+                            
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <br/>
+            <br/>
+            <h2 class="amp">Time is: @DateTime.Now</h2>
+        </div>
+    </header>
+</body>
+</html>

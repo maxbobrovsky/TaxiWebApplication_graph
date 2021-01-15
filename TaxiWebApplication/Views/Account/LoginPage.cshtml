@@ -1,0 +1,56 @@
+﻿@{
+    Layout = null;
+
+}
+
+@model TaxiWebApplication.ViewModels.LoginViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+<style>
+    .d {
+        margin: 0;
+        padding: 0;
+        color: #c3a709;
+    }
+</style>
+<body class="d">
+    <header>
+        <form method="post" asp-controller="Account" asp-action="LoginPage">
+            <div class="container">
+                <h1 class="amp">Authorization</h1>
+
+                <div asp-validation-summary="ModelOnly"></div>
+                <div class="form-group row">
+                    <label asp-for="Email" class="mr-sm-2 mb-0"></label><br />
+                    <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                    <span asp-validation-for="Email"></span>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Password" class="mr-sm-2 mb-0"></label><br />
+                    <input asp-for="Password" class="form-control" placeholder="Password" />
+                    <span asp-validation-for="Password"></span>
+                </div>
+                <br />
+                <div>
+                    <input type="submit" class="btn btn-warning btn-block" value="Login" />
+                </div>
+            </div>
+        </form>
+    </header>
+    <section>
+        <div class="container">
+            <h1 class="teat">Order Pay and Go!</h1>
+            <img src="~/images/order.jpg" class="ordimg" alt="Order" />
+        </div>
+    </section>
+</body>
+</html>
