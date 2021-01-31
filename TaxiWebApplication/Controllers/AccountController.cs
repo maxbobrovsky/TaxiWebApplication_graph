@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +13,9 @@ namespace TaxiWebApplication.Controllers
 {
     public class AccountController : Controller
     {
+
+        [Authorize(Roles = "admin,user")]
+       
         public IActionResult Index()
         {
             return View();
@@ -19,11 +23,13 @@ namespace TaxiWebApplication.Controllers
 
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly RoleManager<IdentityRole> _rolle;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> rolle)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _rolle = rolle;
         }
 
         [HttpGet]
@@ -48,6 +54,8 @@ namespace TaxiWebApplication.Controllers
             {
                 User user = new User { Email = model.Email, UserName = model.Email, NativeCity = model.NativeCity };
                 // добавляем пользователя
+                var userRole = new IdentityRole(model.Role);
+                await _rolle.CreateAsync(userRole);
                 var result = await _userManager.CreateAsync(user, model.Password);
                 var creator = await _userManager.AddToRoleAsync(user, model.Role);
                 
@@ -76,22 +84,23 @@ namespace TaxiWebApplication.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        
         public async Task<IActionResult> LoginPage(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var result =
-                    await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                    await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
                 if (result.Succeeded)
                 {
-                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                    {
-                        return Redirect(model.ReturnUrl);
-                    }
-                    else
-                    {
+                    //if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                    //{
+                    //    return Redirect(model.ReturnUrl);
+                    //}
+                    //else
+                    //{
                         return RedirectToAction("Index", "Account");
-                    }
+                    //}
                 }
                 else
                 {

@@ -105,7 +105,7 @@ namespace TaxiWebApplication.Controllers
             };
 
             double dist = await _grs.GraphDistance(coords.FirstLat, coords.FirstLong, coords.SecondLat, coords.SecondLong);
-            DistPriceViewModel mod = new DistPriceViewModel { Distance = dist, Price = dist * 12 };
+            DistPriceViewModel mod = new DistPriceViewModel { Distance = dist, Price = dist * 6 };
             
 
             return new JsonResult(mod);

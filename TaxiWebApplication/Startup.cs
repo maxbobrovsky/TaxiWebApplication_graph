@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -41,6 +42,22 @@ namespace TaxiWebApplication
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationContext>();
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+            });
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+        .AddCookie(options =>
+        {
+            options.Events.OnRedirectToLogin = context =>
+            {
+                context.Response.Headers["Location"] = context.RedirectUri;
+                context.Response.StatusCode = 401;
+                return Task.CompletedTask;
+            };
+        });
+
             services.AddTransient<GraphRoadService>();
 
             services.AddSingleton<KnnService>();
@@ -76,6 +93,7 @@ namespace TaxiWebApplication
 
             app.UseAuthentication();
             app.UseAuthorization();
+            //app.UseMvcWithDefaultRoute();
 
             app.UseEndpoints(endpoints =>
             {
